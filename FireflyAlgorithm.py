@@ -40,7 +40,7 @@ class FireflyAlgorithm():
 
     def sort_ffa(self):
         self.Index = [i for i in range(self.NP)]
-        self.I, self.Fitness, self.Index = [list(l) for l in zip(*sorted(zip(self.I, self.Fitness, self.Index)))]
+        self.I, self.Fitness, self.Index = [list(l) for l in zip(*sorted(zip(self.I, self.Fitness, self.Index), reverse = True))] # Descending order for 102 row
 
     def replace_ffa(self):  # replace the old population according to the new Index values
         # copy original population to a temporary area
@@ -69,7 +69,7 @@ class FireflyAlgorithm():
                     r += (self.Fireflies[i][k] - self.Fireflies[j][k]) * \
                         (self.Fireflies[i][k] - self.Fireflies[j][k])
                 r = math.sqrt(r)
-                if self.I[i] > self.I[j]:  # brighter and more attractive
+                if self.I[i] < self.I[j]*math.exp(-self.gamma * math.pow(r, 2.0)):  # consider about effect of distance and "brighter" is mean that I[j] > I[i]
                     beta0 = 1.0
                     beta = (beta0 - self.betamin) * \
                         math.exp(-self.gamma * math.pow(r, 2.0)) + self.betamin
